@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block head_title %}All Employees Listing{% endblock head_title %}
+
+{% block content %}
+
+  <!--Main layout-->
+  <main class="pt-4">
+    <div class="container">
+      {% if no_employees_exists %}
+        <div class="alert alert-danger">{{no_employees_exists}}</div>
+      {% else %}
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="row">
+            {% for field in employee_search_form %}
+                <div class="col-lg-4 ">
+                    {{ field|as_crispy_field }}
+                </div>
+            {% endfor %}
+            <div class="col-lg-4 align-self-center"><button type="submit" id="search" class="btn btn-primary">Search Employee</button></div>
+          </div>
+          
+        </form>
+
+        <h3>Employee Listing</h3><small class="text-muted">Click on employee name to view details</small>
+          <div class="table-responsive text-nowrap my-4">
+            {% if no_data %}
+              <div class="alert alert-danger">{{no_data}}</div>
+            {% else %}
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Employee id</th>
+                    <th scope="col">Employee name</th>
+                    <th scope="col">Department</th>
+                    <th scope="colgroup">Actions</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {% for employee in employees %}
+                    <tr>
+                      <th scope="row">{{employee.id}}</th>
+                      <td>
+                        <a data-toggle="tooltip" data-placement="top" title="view details" href="{% url 'attendance_system:employee_attendance_details' employee.id %}">{{ employee.name }}</a>
+                      </td>
+
+                      <td>{{ employee.get_department_display }}</td>
+                      <td>
+                        <a data-toggle="tooltip" data-placement="top" title="edit employee details" style='color:blueviolet;' href="{% url 'attendance_system:employee_update' employee.id %}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                      </td>
+
+                      <td>
+                        <a type="button" data-toggle="modal" data-target="#employee-{{employee.id}}" style='color:red;'>
+                            <i class="fas fa-trash"></i>
+                        </a>
+                        {% include 'modal.html' %}
+                      </td>
+                            
+                    </tr>
+                    
+                  {% endfor %}
+
+                </tbody>
+              </table>
+            {% endif %}
+          </div>
+      {% endif %}      
+    </div>
+  </main>
+  <!--Main layout-->
+
+
+{% endblock content %}
+
+
+{% block extra_scripts %}
+
+<script type="text/javascript">
+window.addEventListener("load", function(){
+
+    const submit_button = document.querySelector('#search')
+    const email_input = document.querySelector("input[name=email]")
+    const departments = document.querySelector('select[name=departments]')
+    submit_button.setAttribute('disabled', 'true');
+    departments.addEventListener('click', function(){
+      submit_button.removeAttribute('disabled')
+    });
+    email_input.addEventListener('keyup', function(){
+      
+    if(this.value != ""){
+        submit_button.removeAttribute('disabled')
+      }
+    
+});
+
+
+});
+
+</script>
+{% endblock extra_scripts %}

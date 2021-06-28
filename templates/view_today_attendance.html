@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block head_title %}View today's attendance{% endblock head_title %}
+
+{% block content %}
+
+  <main class="pt-4">
+    <div class="container">
+      <h4>View Today's Attendance</h4>
+      <div class="table-responsive text-nowrap mt-4">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Employee id</th>
+                <th scope="col">Employee name</th>
+                <th scope="col">Department</th>
+                <th scope="col">Employee attendance status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for record in attendance %}
+                <tr>
+                  <th scope="row">{{record.employee.id}}</th>
+                  <td>{{record.employee.name}}</td>
+                  <td>{{record.employee.get_department_display}}</td>
+                  <td>{% if record.is_present == 'absent' %}
+                        <p class="text-danger font-weight-bold">Absent</td>
+                        {% else %}
+                        <p class="text-success font-weight-bold">Present</td>
+                        {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+        </table>     
+      </div>
+    </div>
+  </main>
+
+
+{% endblock content %}

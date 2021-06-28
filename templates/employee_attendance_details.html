@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block head_title %}Employee Details{% endblock head_title %}
+
+{% block content %}
+
+<main class="pt-4">
+  <div class="container">
+    <form action="" method="POST" novalidate>
+        {% csrf_token %}
+        <div class="row">
+          {% for field in search_form %}
+              <div class="col-lg-4">
+                  {{ field|as_crispy_field }}
+              </div>
+          {% endfor %}
+          <div class="col-lg-4 align-self-center"><button type="submit" id="search" class="btn btn-outline-primary">Search</button></div>
+        </div>
+    </form>
+
+    <div class="row mt-4">
+      <div class="col-lg-3 col-md-6"><small class="text-muted">Employee id:</small><p class="font-weight-bold">{{ employee.id }}</p></div>
+      <div class="col-lg-3 col-md-6"><small class="text-muted">Email:</small><p class="font-weight-bold">{{ employee.email }}</p></div>
+      <div class="col-lg-3 col-md-6"><small class="text-muted">Department:</small><p class="font-weight-bold">{{ employee.get_department_display }}</p></div>
+      <div class="col-lg-3 col-md-6"><small class="text-muted">Phone number:</small><p class="font-weight-bold">{{ employee.phone_number }}</p></div>
+    </div>
+
+
+    {% if no_data %}
+        <div class="alert alert-warning mt-4" role="alert">
+            {{no_data}}
+        </div>
+    {% endif %}
+
+    {% if attendance_qs %}
+      <div class="mt-4"><h4>{{ employee.name }}'s attendance</h4><h6>({{data}})</h6></div>
+      <hr>
+      <table class="table table-bordered mt-4">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Employee attendance status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in attendance_qs %}
+            <tr>
+              <td>{{record.date}}</td>
+              <td>
+                  {% if record.is_present == 'absent' %}
+                  <p class="text-danger font-weight-bold">Absent</td>
+                  {% else %}
+                  <p class="text-success font-weight-bold">Present</td>
+                  {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    {% endif %}
+
+  </div>
+</main>
+
+{% endblock content %}

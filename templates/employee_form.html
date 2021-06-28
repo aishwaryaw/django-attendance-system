@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block head_title %}Employee Details{% endblock head_title %}
+
+{% block content %}
+<main class="p-4">
+  <div class="container">
+
+    {% for error in employee_form.non_field_errors %}
+      <div class="alert alert-danger">
+          <strong>{{ error|escape }}</strong>
+      </div>
+    {% endfor %}
+
+    <h1 class="mb-4">{{ form_type }}</h1>
+    <hr>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ employee_form | crispy}} 
+      {{ attendance_form | crispy }}
+      <button type='submit' class='btn btn-block btn-primary'>Submit</button>
+    </form>
+
+  </div>
+</main>
+
+
+{% endblock content %}
+
+
+
+
+
+
+
+
+
