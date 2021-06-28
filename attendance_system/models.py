@@ -36,7 +36,7 @@ class Employee(models.Model):
 class EmployeeAttendance(models.Model):
     employee = models.ForeignKey('Employee',on_delete=models.CASCADE, null=False, blank=False)
     is_present = models.CharField(max_length=8, choices=ATTENDANCE_CHOICES, blank=False,null=False)
-    date = models.DateField(default=datetime.date.today())
+    date = models.DateField(auto_now_add=True)
 
     def __str__(self) :
         return f"{self.employee.name} {self.date}"
