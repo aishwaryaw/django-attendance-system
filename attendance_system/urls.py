@@ -11,7 +11,7 @@ from . views import (
 app_name = 'attendance_system'
 
 urlpatterns = [
-    path('dashboard/', employees_listing, name='all_attendance_dashboard'),
+    path('', employees_listing, name='all_attendance_dashboard'),
     path('view-today-attendance/', view_today_attendance, name='view_today_attendance'),
     path('edit-today-attendance/', edit_today_attendance, name='edit_today_attendance'),
     path('employee-attendance-details/<empid>/', employee_attendance_details, name='employee_attendance_details'),
